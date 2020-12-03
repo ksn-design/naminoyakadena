@@ -1,0 +1,537 @@
+$cBlack: black;
+$cWhite: white;
+$cNaminoya:rgb(250, 119, 43);
+$cBordor:rgba(0,0,0,0.3);
+@import 'mixin';
+
+
+#container{
+    position: relative;
+    background-color:white;
+    height: 100%; 
+    z-index: 2;
+    // containerのz-indexを2にする事でmobile-menuを背面に持っていく
+    transition: all 0.5s;
+}
+
+.header{
+    background-color: $cWhite;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    // 以下編集
+    position: fixed;
+    z-index: 4;
+    width: 100%;
+    box-shadow: 0 8px 40px -10px rgba(0,0,0,0.5);
+}
+
+.header-logo{
+    margin-left: 30px;
+    
+}
+.header-logo-img{
+    height: 80px; 
+    width: 150px;
+}
+
+.mobile-menu{
+    position: fixed;
+    right: 0;
+    top: 60px;
+    width: 300px;
+
+    &__cover{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.3);
+        opacity: 0;
+        // visibility:hiddenにする事でクリックしても全く反応しなくなる
+        visibility: hidden;
+        transition: 1s;
+        cursor: pointer;
+    }
+    &__main {
+        padding: 0;
+        perspective: 2000px;
+        transform: preserve-3d;
+    }
+    &__item{
+        list-style: none;
+        display: block;
+        transform: translate3d(0,0,-1000px);
+        padding: 0 40px;
+        transition:transform 0.3s, opacity 0.2s;
+        opacity: 0;
+    }
+    &__link{
+        display: block;
+        margin-top: 30px;
+        color: black;
+        text-decoration: none;
+    }
+    .main-title{
+        font-weight: 600;
+        font-size: 25px;
+    
+    }
+    .sub-title{
+        display: block;
+        font-size: 14px;
+        color: #535353;
+    }
+}
+body{
+    margin: 0;
+}
+.mobile-menu__btn {
+    background-color: unset;
+    border: none;
+    outline: none !important;
+    cursor: pointer;
+
+    & > span {
+        background-color: $cBlack;
+        width: 35px;
+        height: 2px;
+        display: block;
+        margin-bottom: 9px;
+        transition: transform 0.7s;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.menu-open {
+   
+    & #container{
+        transform: translate(-300px, 60px);
+        box-shadow: 0 8px 40px -10px rgba(0,0,0,0.8);
+        
+    }
+    & .mobile-menu{
+        &__cover{
+            opacity: 1;
+            visibility: visible;
+            // 以下編集
+            z-index: 3;
+        }
+        &__item{
+            
+            transform: none;
+            opacity: 1;
+            
+            @for $i from 1 to 5 {
+                &:nth-child(#{$i}){
+                    transition-delay: $i*0.07s;
+                }
+            }
+            
+        }
+
+    }
+    // 以下編集
+    // & #content{
+    //     opacity: 0;
+    // }
+    // ここまで
+    & .mobile-menu__btn {
+        & > span {
+            background-color: $cBlack;
+
+            &:nth-child(1) {
+                transition-delay: 70ms;
+                transform: translateY(11px) rotate(135deg);
+            }
+            &:nth-child(2) {
+                transition-delay: 0s;
+                transform:  translateX(-18px) scaleX(0);
+            }
+            &:nth-child(3) {
+                transition-delay: 140ms;
+                transform: translateY(-11px) rotate(-135deg);
+            }
+        }
+    }
+}
+
+// lodor
+
+#global-container {
+  transition: opacity 1s ;
+}
+
+.pace-running #global-container {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.pace {
+  z-index: 2000;
+  position: fixed;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.pace .pace-progress {
+  transform: none !important;
+  text-align: center;
+}
+
+.pace .pace-progress::after {
+  content: attr(data-progress-text);
+  display: block;
+  font-weight: 100;
+  font-size: 2em;
+  font-family: 'Helvetica Neue', 'Yu Gothic', 'Meiryo', sans-serif;
+  color: #535353;
+}
+
+.pace.pace-inactive {
+  display: none;
+}
+
+.pace-progress-inner {
+  width: 40px;
+  height: 40px;
+  background-color:$cNaminoya;
+
+  margin: 0 auto;
+  @include animation(
+    $name: sk-rotateplane,
+    $duration: 1.2s,
+    $iteration-count: infinite,
+    $timing-function: ease-in-out
+  );
+}
+
+@keyframes sk-rotateplane {
+  0% {
+    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(120px) rotateX(-180deg) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(120px) rotateX(-180deg) rotateY(-180deg);
+  }
+}
+
+
+// .swiper-container {
+//     overflow: visible !important;
+// // コメントアウトする事で画面崩れを解決
+//   }
+
+// #contentは付け加えた
+  #content{
+      padding-top: 100px;
+  }
+
+
+  .swiper-slide {
+    height: 500px;
+    overflow: hidden;
+  
+    & > img {
+      width: 100%;
+      height: 400px;
+      max-width: 100%;
+      object-fit: cover;
+      transform: scale(1.3);
+      transition: transform 1.9s ease;
+    }
+  
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 61, 125, 0.1);
+    }
+  
+    &-active {
+      & > img {
+        transform: none;
+      }
+  
+      & .hero__title {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  
+  .hero {
+    &__title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, calc(-50% + 20px));
+      color: $cWhite;
+      font-size: 25px;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.3s ease 1s, transform 0.3s ease 1s;
+    }
+  
+    &__footer {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      z-index: 2;
+      height: 68px;
+      width: 22px;
+      overflow: hidden;
+    }
+  
+    &__downarrow {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 6px;
+      @include animation(
+        $name: kf-arrow-anime,
+        $iteration-count: infinite,
+        $duration: 2s,
+        $timing-function: linear
+      );
+    }
+  
+    &__scrolltext {
+      position: absolute;
+      transform: rotate(90deg);
+      color: rgba(255, 255, 255, 0.7);
+      left: -8px;
+      top: 11px;
+      font-size: 1.2em;
+    }
+  }
+  
+  @keyframes kf-arrow-anime {
+    0%,
+    50%,
+    100% {
+      transform: translateY(-10%);
+    }
+    30% {
+      transform: none;
+    }
+  }
+  
+
+// ここからmain
+
+.containerw{
+    // width: 92%;
+    margin: 0 auto;
+}
+
+.main-info{
+    margin:0 4% ;
+    margin-top: 80px;
+    & .info-title{
+        text-align: center;
+        & h1 {
+            color: $cNaminoya;
+            
+            
+          
+        }
+        & h2{
+            border-bottom: rgba(0,0,0,0.5) 2px solid;
+        }
+    }
+}
+.information-details{
+    margin: 60px 4%;
+
+    & dt{
+        border-bottom: 1px $cBordor solid;
+        display: block;
+        width: 100%;
+        
+        
+    }
+    & dd{
+        padding: 15px 0;
+    }
+}
+
+.googleMap{
+    width: 100%;
+    border: $cBordor 2px solid;
+    display: block;
+    box-shadow: 0 8px 40px -10px rgba(0,0,0,0.4);
+    & iframe{
+        width: 100%;
+        height: 250px;
+        display: block;
+        margin: 0 auto;
+        border: $cBordor 2px solid;
+    }
+    
+}
+.explain{
+    position: relative;
+    padding-top:0px ;
+    width: 94%;
+    margin: 0 auto;
+    & img{
+        width: 100%;
+        box-shadow: 0 8px 40px -10px rgba(0,0,0,0.8);
+    }
+}
+.imageOut{
+    margin: 15px 0;
+    width: 94%;
+    margin: 0 auto;
+    
+    & img{
+        width: 100%;
+        
+
+    }
+}
+.Menu-exp{
+    margin: 0 auto;
+    width: 94%;
+    & p{
+        
+        text-align: center;
+
+    }
+}
+
+#btn-container {
+    text-align: center;
+    padding: 30px;
+  }
+  .mbtn{
+    display: block;
+    margin: 0 auto;
+  
+    .btn {
+      position: relative;
+      display: block;
+      transform-style: preserve-3d;
+      perspective: 300px;
+      width: 150px;
+      height: 50px;
+      margin: 0 auto;
+      cursor: pointer;
+      
+      
+  
+      &.cubic {
+        
+        & span {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        //   border: 1px solid $cBlack;
+          line-height: 48px;
+          text-align: center;
+          transition: all 0.3s;
+          transform-origin: center center -25px;
+  
+        }
+  
+        & .hovering {
+          background-color: $cBlack;
+          color: $cWhite;
+          transform: rotateX(90deg);
+        }
+  
+        & .default {
+          background-color:#535353;
+          color: white;
+          transform: rotateX(0);
+        }
+  
+        &:hover {
+          & .hovering {
+            transform: rotateX(0);
+          }
+          & .default {
+            transform: rotateX(-90deg);
+          }
+        }
+      }
+    }
+  }
+
+  .insta{
+      margin:4% 4%;
+      text-align: center;
+      height: 350px;
+      overflow: hidden;
+      & iframe{
+          width: 100%;
+      }
+  }
+
+  .valuable-info{
+      padding:80px 4% ;
+      margin: 0 auto;
+
+      &__content{
+        color: red;
+        
+
+          
+      }
+  }
+
+  .footer{
+    margin-top: 50px;
+    background-color: rgba(165, 131, 108, 0.3);
+    padding: 30px 0;
+      & a{
+          color: #352f2f;
+
+      }
+  }
+
+  
+
+
+  // breakpoint
+
+@media screen and (min-width: 481px){
+  @import 'breakpoints/480up';
+}
+
+@media screen and (min-width: 601px){
+  @import 'breakpoints/600up';
+}
+
+@media screen and (min-width: 961px){
+  @import 'breakpoints/960up';
+}
+
+@media screen and (min-width: 1280px){
+  @import 'breakpoints/1280up';
+}
+
+
+
+
+  
